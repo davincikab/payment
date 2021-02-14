@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Pay Arrears {% endblock %}
+
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/mpesa.css' %}">
+    <style>
+        .navbar {
+            box-shadow: 1px 1px 0.5em var(--light-gray);
+        }
+        .home {
+            display: flex;
+            align-items: center;
+            margin-top: 4em;
+            justify-content: center;
+        }
+
+        .home div {
+            min-width: 30%;
+            box-shadow: 1px 1px 0.2em var(--light-gray);
+            padding: 1em;
+        }
+        .spinner {
+            position: absolute;
+            top:0;
+            left:0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #a3a3a36b;
+        }
+
+        .spinner div i {
+            font-size: 2em;
+            font-size: 2.5em;
+            color: var(--primary);
+            animation-name: spin;
+            animation-duration: 2s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform:rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+{% include '../navbar.html' %}
+<div class="spinner d-none">
+    <div class="">
+        <i class="fa fa-spinner"></i>
+    </div>
+</div>
+<div class="home ">
+    <div class="">
+        <p class="bold">LIPA NA MPESA</p>
+        <form action="" method="POST" id="payment_form">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field.label }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="text-small">{{field.help_text}}</small><br>
+                {% endif %}
+            {% endfor %}
+          
+
+            <button type="submit" class="btn btn-cta w-100 mt-3">Pay Arrear</button>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/addControlClass.js' %}"></script>
+<script>
+    // spinner to indicate an action
+    $('#payment_form').on("submit", function(e) {
+        // load the spinner
+        $('.spinner').toggleClass('d-none');
+    });
+</script>
+{% endblock %}
